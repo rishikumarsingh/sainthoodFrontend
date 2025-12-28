@@ -1,0 +1,33 @@
+import React from 'react';
+import Header from '../shared/Header';
+import Footer from '../shared/Footer';
+import crausel1 from '../assets/img/carousel-1.jpg'
+function Testimonial() {
+    return (
+        <div>
+            <Header />
+      {/* <!-- Header Start --> */}
+      <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Testimonial</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Testimonial</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/* <!-- Header End --> */}
+
+            <Footer />
+        </div>
+    );
+}
+
+export default Testimonial;
