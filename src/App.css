@@ -1,23 +1,24 @@
 .image-container {
-    position: relative;
-    display: inline-block;
-  }
-  
-  /* .background-image {
+  position: relative;
+  display: inline-block;
+}
+
+/* .background-image {
     width: 100%;
     height: auto;
     display: block;
   }
    */
-  .overlay-text {
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    color: rgb(88, 72, 192);
-    
+.overlay-text {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  color: rgb(88, 72, 192);
 
-  }
-  /* Slide bar styles */
+
+}
+
+/* Slide bar styles */
 #sliderCarousel {
   margin-top: 20px;
 }
@@ -41,6 +42,7 @@
   padding: 15px;
   border-radius: 8px;
 }
+
 .carousel-img {
   height: 600px;
   object-fit: cover;
@@ -93,6 +95,7 @@
     opacity: 0;
     transform: translateY(-30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -104,6 +107,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -189,12 +193,13 @@ body {
   font-size: 0.95rem;
   color: #555;
 }
+
 .gallery-light-wrapper {
   padding: 60px 20px;
   max-width: 1400px;
   margin: 0 auto;
 
-  background: 
+  background:
     linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
     url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
   background-size: cover;
@@ -204,3 +209,110 @@ body {
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
 }
 
+
+.certificate-list li {
+  margin-bottom: 10px;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #ddd;
+  padding-bottom: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover effect on the whole li */
+.certificate-list li:hover {
+  background-color: #f8f9fa;
+  /* subtle highlight */
+  transform: translateX(5px);
+  /* small slide effect */
+}
+
+/* Style for the download link */
+.certificate-list a {
+  color: #007bff;
+  text-decoration: none;
+  margin-left: 10px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover effect for download icon */
+.certificate-list a:hover i {
+  color: #0056b3;
+  transform: scale(1.2);
+  /* slight zoom */
+}
+
+/* Optional: cursor pointer */
+.certificate-list a:hover {
+  cursor: pointer;
+}
+
+.logotextheading {
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.logotextsubheading {
+  font-size: 16px;
+  color: #2a56a2;
+}
+
+@media (max-width: 450px) {
+  .logotextheading {
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  .logotextsubheading {
+    font-size: 10px;
+    color: #2a56a2;
+  }
+}
+
+
+
+.divBox {
+  position: relative;
+  height: 85px;
+
+  /* Remove border from top/left/right so we can replace them cleanly */
+  border-top: none;
+  border-left: none;
+  border-right: none;
+
+  /* Only bottom border stays in original color */
+  border-bottom: 1px solid #2a56a2;
+
+  box-sizing: border-box;
+}
+
+.divBox::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 42px;
+  width: 100%;
+
+  /* Red borders for the top 42px */
+  border-top: 1px solid #06BBCC;
+  border-left: 1px solid #06BBCC;
+  border-right: 1px solid #06BBCC;
+  box-sizing: border-box;
+}
+
+.divBox::after {
+  content: "";
+  position: absolute;
+  top: 42px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 42px);
+
+  /* Original color border for the remaining part */
+  border-left: 1px solid #2a56a2;
+  border-right: 1px solid #2a56a2;
+  box-sizing: border-box;
+}

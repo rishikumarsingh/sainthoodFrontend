@@ -8,23 +8,23 @@ function Contact() {
     <div>
       <Header />
       {/* <!-- Header Start --> */}
-    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+      <div class="container-fluid bg-primary py-5 mb-5 page-header">
         <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-lg-10 text-center">
-                    <h1 class="display-3 text-white animated slideInDown">Contact</h1>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center">
-                            <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
-                            <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Contact</li>
-                        </ol>
-                    </nav>
-                </div>
+          <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+              <h1 class="display-3 text-white animated slideInDown">Contact</h1>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center">
+                  <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
+                  <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
+                  <li class="breadcrumb-item text-white active" aria-current="page">Contact</li>
+                </ol>
+              </nav>
             </div>
+          </div>
         </div>
-    </div>
-    {/* <!-- Header End --> */}
+      </div>
+      {/* <!-- Header End --> */}
 
       <div className="container-xxl py-5">
         <div className="container">
@@ -36,8 +36,7 @@ function Contact() {
             <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
               <h5>Get In Touch</h5>
               <p className="mb-4">
-                The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. 
-                Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.
+                Feel free to contact us anytime — we’re always happy to help!
               </p>
               <div className="d-flex align-items-center mb-3">
                 <div className="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary" style={{ width: "50px", height: "50px" }}>
@@ -45,7 +44,7 @@ function Contact() {
                 </div>
                 <div className="ms-3">
                   <h5 className="text-primary">Office</h5>
-                  <p className="mb-0">123 Street, New York, USA</p>
+                  <p className="mb-0">Near Madhav Farm House Road, Dadri, Uttar Pradesh – 203207</p>
                 </div>
               </div>
               <div className="d-flex align-items-center mb-3">
@@ -54,7 +53,7 @@ function Contact() {
                 </div>
                 <div className="ms-3">
                   <h5 className="text-primary">Mobile</h5>
-                  <p className="mb-0">+012 345 67890</p>
+                  <p className="mb-0">+91-8130830392 +91-7838481244</p>
                 </div>
               </div>
               <div className="d-flex align-items-center">
@@ -63,7 +62,7 @@ function Contact() {
                 </div>
                 <div className="ms-3">
                   <h5 className="text-primary">Email</h5>
-                  <p className="mb-0">info@example.com</p>
+                  <p className="mb-0">st.hoodconventschool@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -71,8 +70,7 @@ function Contact() {
             <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
               <iframe
                 className="position-relative rounded w-100 h-100"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001156.4288297426!2d-78.01371936852176!3d42.72876761954724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4ccc4bf0f123a5a9%3A0xddcfc6c1de189567!2sNew%20York%2C%20USA!5e0!3m2!1sen!2sbd!4v1603794290143!5m2!1sen!2sbd"
-                frameBorder="0"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.4471881466667!2d77.54003497549574!3d28.55357378244233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ceb5c58bef79d%3A0x3b97289295469e7f!2sSaint%20Hood%20Convent%20School!5e0!3m2!1sen!2sin!4v1728883200000!5m2!1sen!2sin" frameBorder="0"
                 style={{ minHeight: "300px", border: "0" }}
                 allowFullScreen=""
                 aria-hidden="false"

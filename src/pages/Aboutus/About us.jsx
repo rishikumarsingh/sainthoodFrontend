@@ -1,5 +1,5 @@
 import React from 'react';
-import about from '../../assets/img/about.jpg'
+import about from '../../assets/img/prinImg.jpeg'
 import team1 from '../../assets/img/team-1.jpg'
 import team2 from '../../assets/img/team-2.jpg'
 import team3 from '../../assets/img/team-3.jpg'
@@ -15,20 +15,20 @@ function Aboutus() {
       {/* Service Start */}
       <div class="container-fluid bg-primary py-5 mb-5 page-header">
         <div className="container py-5">
-            <div className="row justify-content-center">
-                <div className="col-lg-10 text-center">
-                    <h1 className="display-3 text-white animated slideInDown">About Us</h1>
-                    <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb justify-content-center">
-                            <li className="breadcrumb-item"><a className="text-white" href="#">Home</a></li>
-                            <li className="breadcrumb-item"><a className="text-white" href="#">Pages</a></li>
-                            <li className="breadcrumb-item text-white active" aria-current="page">About</li>
-                        </ol>
-                    </nav>
-                </div>
+          <div className="row justify-content-center">
+            <div className="col-lg-10 text-center">
+              <h1 className="display-3 text-white animated slideInDown">About Us</h1>
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb justify-content-center">
+                  <li className="breadcrumb-item"><a className="text-white" href="#">Home</a></li>
+                  <li className="breadcrumb-item"><a className="text-white" href="#">Pages</a></li>
+                  <li className="breadcrumb-item text-white active" aria-current="page">About</li>
+                </ol>
+              </nav>
             </div>
+          </div>
         </div>
-    </div>
+      </div>
       {/* Service End */}
 
       {/* About Start */}
@@ -51,23 +51,26 @@ function Aboutus() {
             </div>
             <div className="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
               <h6 className="section-title bg-white text-start text-primary pe-3">About Us</h6>
-              <h1 className="mb-4">Welcome to eLEARNING</h1>
+              <h1 className="mb-4">MS. ASHA SHARMA Principal</h1>
               <p className="mb-4">
-                Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos.
-                Clita erat ipsum et lorem et sit.
+                SAINTHOOD Convent school at Dadri (school of sainthood Shiksha Prasar Samiti) commenced its first academic session from April 2014 and in 2017.
               </p>
               <p className="mb-4">
-                Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos.
-                Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet
+                School got pride to be a part of C.B.S.E (Central Board of Secondary Education) New Delhi by getting its affiliation. Recent years have witnessed the enormous efforts put up by the dedicated family of SHCS, which strives for excellence, seeks new vistas, finds noble goals and never yields to hurdles or challenges that come their way.
+              </p>
+              <p className="mb-4">
+                We believe in imparting meaningful and quality education to our students. Reinforcing moral training and need for social services are also the cherished goals.
+
+                VISSION-SHCS is an institution providing effective leadership, professional staff and an environment conducive to the holistic development of every child. Mission-to impart education with multi-dimensional aspects and train young generation to develop them as valuable assets to the society..
               </p>
               <div className="row gy-2 gx-4 mb-4">
                 {[
                   'Skilled Instructors',
                   'Online Classes',
-                  'International Certificate',
+                  'National Certificate',
                   'Skilled Instructors',
                   'Online Classes',
-                  'International Certificate'
+                  'Certificate'
                 ].map((item, index) => (
                   <div className="col-sm-6" key={index}>
                     <p className="mb-0">
@@ -77,9 +80,7 @@ function Aboutus() {
                   </div>
                 ))}
               </div>
-              <a className="btn btn-primary py-3 px-5 mt-2" href="">
-                Read More
-              </a>
+            
             </div>
           </div>
         </div>
@@ -91,8 +92,8 @@ function Aboutus() {
       <div className="container-xxl py-5">
         <div className="container">
           <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <h6 className="section-title bg-white text-center text-primary px-3">Instructors</h6>
-            <h1 className="mb-5">Expert Instructors</h1>
+            <h6 className="section-title bg-white text-center text-primary px-3">Teachers</h6>
+            <h1 className="mb-5">Expert Teachers</h1>
           </div>
           <div className="row g-4">
             <div className="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
