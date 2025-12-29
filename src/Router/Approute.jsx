@@ -14,6 +14,7 @@ import Dashboard from '../pages/Admin/Dashboard'
 import UploadBanner from '../pages/Admin/UploadBanner'
 import UploadGallery from '../pages/Admin/UploadGallery'
 import CreateNotification from '../pages/Admin/CreateNotification'
+import CustomerSupport from '../pages/Admin/CustomerSupport'
 
 function Approute() {
   return (
@@ -34,6 +35,7 @@ function Approute() {
       <Route path='/upload-banner' element={<UploadBanner/>} />
       <Route path='/upload-gallery' element={<UploadGallery/>} />
       <Route path='/notifications' element={<CreateNotification/>} />
+      <Route path='/customer-support' element={<CustomerSupport/>} />
 
 
       

@@ -1,26 +1,36 @@
 import React, { useEffect, useState } from "react";
 import DashboardNavbar from "./DashboardNavbar";
-import { useDispatch,useSelector } from "react-redux";
-import { galleryUpload, getGalleryImages } from "../../service/Authslice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  galleryUpload,
+  getGalleryImages,
+  deleteGallery,
+} from "../../service/Authslice";
 
 function UploadGallery() {
-  const { GalleryImages } = useSelector((state) => state.auth); // from Redux
-    console.log(GalleryImages)
-
   const dispatch = useDispatch();
-  const [banners, setBanners] = useState([]); // selected files before upload
+  const { GalleryImages } = useSelector((state) => state.auth);
+
+  const [banners, setBanners] = useState([]);
+
+  // 🔹 Loader states
+  const [pageLoading, setPageLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [deleteLoadingId, setDeleteLoadingId] = useState(null);
+
+  // 🔹 Load gallery on mount
   useEffect(() => {
-    dispatch(getGalleryImages());
+    setPageLoading(true);
+    dispatch(getGalleryImages()).finally(() => setPageLoading(false));
   }, [dispatch]);
 
-
-  // Handle multiple file selection
+  // 🔹 Handle file selection
   const handleFileChange = (e) => {
     setBanners(Array.from(e.target.files));
   };
 
-  // Handle form submit
-  const handleSubmit = (e) => {
+  // 🔹 Submit upload
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (banners.length === 0) {
@@ -28,40 +38,59 @@ function UploadGallery() {
       return;
     }
 
-    // ✅ create FormData payload
     const formData = new FormData();
-    banners.forEach((file) => {
-      formData.append("files", file); // check backend key name
-    });
+    banners.forEach((file) => formData.append("files", file));
 
-    // Dispatch Redux thunk
-    dispatch(galleryUpload(formData)).then(() => {
-      setBanners([]); // clear after upload
-      dispatch(getGalleryImages()); // refresh table
-    });
+    setSubmitLoading(true);
+
+    try {
+      // ✅ unwrap makes rejected thunk throw error message
+      await dispatch(galleryUpload(formData)).unwrap();
+
+      alert("Images uploaded successfully ✅");
+      setBanners([]);
+      dispatch(getGalleryImages());
+
+    } catch (errorMessage) {
+      // ✅ BACKEND MESSAGE HERE
+      alert(errorMessage);
+      setBanners([]);
+
+    } finally {
+      setSubmitLoading(false);
+    }
   };
 
-  // Helper to get file icon
-  const getFileIcon = (file) => {
-    if (file.type.startsWith("image/")) return "🖼";
-    return "📄";
+
+  // 🔹 Delete image
+  const handleRemove = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this image?")) return;
+
+    setDeleteLoadingId(id);
+
+    try {
+      await dispatch(deleteGallery(id));
+      await dispatch(getGalleryImages());
+    } finally {
+      setDeleteLoadingId(null);
+    }
   };
 
   return (
     <div>
       <DashboardNavbar />
+
       <div
         style={{
           minHeight: "100vh",
           background: "#f9f9fb",
+          padding: "20px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "20px",
-          fontFamily: "Arial, sans-serif",
         }}
       >
-        {/* Upload Card */}
+        {/* UPLOAD CARD */}
         <div
           style={{
             width: "100%",
@@ -73,18 +102,13 @@ function UploadGallery() {
             marginTop: "15px",
           }}
         >
-          <h2
-            style={{
-              textAlign: "center",
-              marginBottom: "25px",
-              color: "#333",
-            }}
-          >
+          <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
             🖼 Upload Gallery
           </h2>
 
           <form onSubmit={handleSubmit}>
             <div
+              onClick={() => document.getElementById("galleryInput").click()}
               style={{
                 border: "2px dashed #ff6600",
                 borderRadius: "10px",
@@ -93,7 +117,6 @@ function UploadGallery() {
                 marginBottom: "20px",
                 cursor: "pointer",
               }}
-              onClick={() => document.getElementById("galleryInput").click()}
             >
               <input
                 type="file"
@@ -103,59 +126,48 @@ function UploadGallery() {
                 style={{ display: "none" }}
                 onChange={handleFileChange}
               />
-              <p
-                style={{
-                  color: "#ff6600",
-                  fontWeight: "bold",
-                  fontSize: "16px",
-                }}
-              >
-                🖼 Upload Gallery Images
+
+              <p style={{ color: "#ff6600", fontWeight: "bold" }}>
+                Select Gallery Images
               </p>
-              <small style={{ color: "#666" }}>
-                You can upload multiple images (Max 10MB each)
-              </small>
 
               {banners.length > 0 && (
-                <div
-                  style={{
-                    marginTop: "10px",
-                    color: "#333",
-                    fontSize: "14px",
-                    textAlign: "left",
-                  }}
-                >
-                  <strong>Selected Files:</strong>
-                  <ul>
-                    {banners.map((file, idx) => (
-                      <li key={idx}>{file.name}</li>
-                    ))}
-                  </ul>
-                </div>
+                <ul style={{ textAlign: "left", fontSize: "14px" }}>
+                  {banners.map((file, i) => (
+                    <li key={i}>{file.name}</li>
+                  ))}
+                </ul>
               )}
             </div>
 
             <button
               type="submit"
+              disabled={submitLoading}
               style={{
                 width: "100%",
                 padding: "14px",
-                border: "none",
                 borderRadius: "8px",
-                background: "#ff6600",
+                border: "none",
+                background: submitLoading ? "#ccc" : "#ff6600",
                 color: "#fff",
                 fontWeight: "bold",
-                fontSize: "16px",
-                cursor: "pointer",
+                cursor: submitLoading ? "not-allowed" : "pointer",
               }}
             >
-              Submit
+              {submitLoading ? "Uploading..." : "Submit"}
             </button>
           </form>
         </div>
 
-        {/* Uploaded Banners Table */}
-        {GalleryImages?.images?.length > 0 && (
+        {/* LOADER ON PAGE LOAD */}
+        {pageLoading && (
+          <p style={{ marginTop: "30px", fontWeight: "bold" }}>
+            ⏳ Loading gallery...
+          </p>
+        )}
+
+        {/* GALLERY TABLE */}
+        {!pageLoading && GalleryImages?.images?.length > 0 && (
           <div
             style={{
               width: "100%",
@@ -165,128 +177,55 @@ function UploadGallery() {
               borderRadius: "16px",
               padding: "20px",
               boxShadow: "0px 6px 15px rgba(0,0,0,0.1)",
-              overflowX: "auto",
             }}
           >
-            <h3
-              style={{
-                marginBottom: "20px",
-                color: "#333",
-                fontSize: "20px",
-                fontWeight: "600",
-              }}
-            >
-            🖼 Upload Gallery
-            </h3>
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "separate",
-                borderSpacing: "0 10px",
-              }}
-            >
+            <h3 style={{ marginBottom: "15px" }}>🖼 Uploaded Gallery</h3>
+
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
-                <tr style={{ background: "#f4f4f6" }}>
-                  <th
-                    style={{
-                      padding: "12px",
-                      textAlign: "left",
-                      fontWeight: "600",
-                      color: "#555",
-                      borderRadius: "10px 0 0 10px",
-                    }}
-                  >
-                    #
-                  </th>
-                  <th
-                    style={{
-                      padding: "12px",
-                      textAlign: "left",
-                      fontWeight: "600",
-                      color: "#555",
-                    }}
-                  >
-                    Preview
-                  </th>
-                  <th
-                    style={{
-                      padding: "12px",
-                      textAlign: "left",
-                      fontWeight: "600",
-                      color: "#555",
-                    }}
-                  >
-                    File
-                  </th>
-                  <th
-                    style={{
-                      padding: "12px",
-                      textAlign: "left",
-                      fontWeight: "600",
-                      color: "#555",
-                      borderRadius: "0 10px 10px 0",
-                    }}
-                  >
-                    URL
-                  </th>
+                <tr>
+                  <th>#</th>
+                  <th>Preview</th>
+                  <th>File</th>
+                  <th>Action</th>
                 </tr>
               </thead>
+
               <tbody>
-                {GalleryImages?.images?.map((banner, idx) => (
-                  <tr
-                    key={idx}
-                    style={{
-                      background: idx % 2 === 0 ? "#fff" : "#fafafa",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-                      borderRadius: "10px",
-                      transition: "0.2s ease",
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = "#f0f8ff")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background =
-                        idx % 2 === 0 ? "#fff" : "#fafafa")
-                    }
-                  >
-                    <td
-                      style={{
-                        padding: "12px",
-                        fontWeight: "500",
-                        color: "#333",
-                      }}
-                    >
-                      {idx + 1}
-                    </td>
-                    <td style={{ padding: "12px" }}>
+                {GalleryImages.images.map((img, i) => (
+                  <tr key={img._id}>
+                    <td>{i + 1}</td>
+                    <td>
                       <img
-                        src={banner.url}
-                        alt={banner.fileName}
-                        style={{
-                          width: "100px",
-                          borderRadius: "8px",
-                          border: "1px solid #eee",
-                        }}
+                        src={img.url}
+                        alt=""
+                        style={{ width: "70px", height: "70px", borderRadius: "6px", marginBottom: "15px" }}
                       />
                     </td>
-                    <td style={{ padding: "12px", color: "#444" }}>
-                      {banner.fileName}
-                    </td>
-                    <td style={{ padding: "12px" }}>
-                      <a
-                        href={banner.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <td>{img.fileName}</td>
+                    <td>
+                      <button
+                        onClick={() => handleRemove(img._id)}
+                        disabled={deleteLoadingId === img._id}
                         style={{
-                          color: "#ff6600",
-                          textDecoration: "none",
-                          fontWeight: "500",
+                          background:
+                            deleteLoadingId === img._id
+                              ? "#ccc"
+                              : "#ff4d4f",
+                          color: "#fff",
+                          border: "none",
+                          padding: "6px 12px",
+                          borderRadius: "6px",
+                          cursor:
+                            deleteLoadingId === img._id
+                              ? "not-allowed"
+                              : "pointer",
                         }}
                       >
-                        {banner.url.length > 40
-                          ? banner.url.substring(0, 40) + "..."
-                          : banner.url}
-                      </a>
+                        {deleteLoadingId === img._id
+                          ? "Deleting..."
+                          : "Delete"}
+                      </button>
                     </td>
                   </tr>
                 ))}

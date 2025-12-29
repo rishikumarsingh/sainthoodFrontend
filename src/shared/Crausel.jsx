@@ -14,8 +14,6 @@ const Carousel = () => {
 
   // Fallback images (local assets)
   const fallbackImages = [
-    { url: banner1 },
-    { url: banner2 },
     { url: banner3 },
   ];
 

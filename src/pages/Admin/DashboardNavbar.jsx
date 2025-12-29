@@ -70,6 +70,18 @@ function DashboardNavbar() {
             🔔 Create Notification
           </Link>
         </li>
+        <li>
+          <Link
+            to="/customer-support"
+            style={{
+              color: "#fff",
+              textDecoration: "none",
+              fontSize: "16px",
+            }}
+          >
+            🔔 Get Customer Support
+          </Link>
+        </li>
       </ul>
 
       {/* Right - Admin Profile + Logout */}

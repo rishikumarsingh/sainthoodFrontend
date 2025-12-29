@@ -1,25 +1,73 @@
-import React from 'react';
-import Header from '../shared/Header';
-import carousel1 from '../assets/img/carousel-1.jpg'; // renamed for consistency
-import Footer from '../shared/Footer';
+import React, { useState } from "react";
+import Header from "../shared/Header";
+import Footer from "../shared/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { contactCreate } from "../service/Authslice";
 
 function Contact() {
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth);
+
+  // ✅ STATE (added)
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const { name, email, subject, message } = formData;
+
+  // ✅ HANDLE CHANGE (added)
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  // ✅ SUBMIT (added)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!name || !email || !message) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    // 🔁 MAP frontend → backend fields
+    const payload = {
+      firstname: name.split(" ")[0],
+      lastname: name.split(" ").slice(1).join(" ") || "NA",
+      email,
+      contact: message, // backend expects contact
+    };
+
+    dispatch(contactCreate(payload)).then((res) => {
+      if (res?.payload?.status) {
+        alert("✅ Message sent successfully");
+
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        alert(res?.payload?.message || "❌ Something went wrong");
+      }
+    });
+  };
+
   return (
     <div>
       <Header />
+
       {/* <!-- Header Start --> */}
-      <div class="container-fluid bg-primary py-5 mb-5 page-header">
-        <div class="container py-5">
-          <div class="row justify-content-center">
-            <div class="col-lg-10 text-center">
-              <h1 class="display-3 text-white animated slideInDown">Contact</h1>
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb justify-content-center">
-                  <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
-                  <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
-                  <li class="breadcrumb-item text-white active" aria-current="page">Contact</li>
-                </ol>
-              </nav>
+      <div className="container-fluid bg-primary py-5 mb-5 page-header">
+        <div className="container py-5">
+          <div className="row justify-content-center">
+            <div className="col-lg-10 text-center">
+              <h1 className="display-3 text-white animated slideInDown">
+                Contact
+              </h1>
             </div>
           </div>
         </div>
@@ -28,45 +76,26 @@ function Contact() {
 
       <div className="container-xxl py-5">
         <div className="container">
-          <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <h6 className="section-title bg-white text-center text-primary px-3">Contact Us</h6>
-            <h1 className="mb-5">Contact For Any Query</h1>
+          <div className="text-center mb-5">
+            <h6 className="section-title bg-white text-primary px-3">
+              Contact Us
+            </h6>
+            <h1>Contact For Any Query</h1>
           </div>
+
           <div className="row g-4">
-            <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+
+            {/* LEFT INFO — unchanged */}
+            <div className="col-lg-4 col-md-6">
               <h5>Get In Touch</h5>
-              <p className="mb-4">
-                Feel free to contact us anytime — we’re always happy to help!
-              </p>
-              <div className="d-flex align-items-center mb-3">
-                <div className="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary" style={{ width: "50px", height: "50px" }}>
-                  <i className="fa fa-map-marker-alt text-white"></i>
-                </div>
-                <div className="ms-3">
-                  <h5 className="text-primary">Office</h5>
-                  <p className="mb-0">Near Madhav Farm House Road, Dadri, Uttar Pradesh – 203207</p>
-                </div>
-              </div>
-              <div className="d-flex align-items-center mb-3">
-                <div className="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary" style={{ width: "50px", height: "50px" }}>
-                  <i className="fa fa-phone-alt text-white"></i>
-                </div>
-                <div className="ms-3">
-                  <h5 className="text-primary">Mobile</h5>
-                  <p className="mb-0">+91-8130830392 +91-7838481244</p>
-                </div>
-              </div>
-              <div className="d-flex align-items-center">
-                <div className="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary" style={{ width: "50px", height: "50px" }}>
-                  <i className="fa fa-envelope-open text-white"></i>
-                </div>
-                <div className="ms-3">
-                  <h5 className="text-primary">Email</h5>
-                  <p className="mb-0">st.hoodconventschool@gmail.com</p>
-                </div>
-              </div>
+              <p>Feel free to contact us anytime — we’re always happy to help!</p>
+              <p><strong>📍 Office:</strong> Dadri, UP – 203207</p>
+              <p><strong>📞 Phone:</strong> +91-8130830392</p>
+              <p><strong>📧 Email:</strong> st.hoodconventschool@gmail.com</p>
             </div>
 
+            {/* MAP — unchanged */}
+            
             <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
               <iframe
                 className="position-relative rounded w-100 h-100"
@@ -79,41 +108,80 @@ function Contact() {
               ></iframe>
             </div>
 
-            <div className="col-lg-4 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
-              <form>
+            {/* FORM — LOGIC ADDED */}
+            <div className="col-lg-4 col-md-12">
+              <form onSubmit={handleSubmit}>
                 <div className="row g-3">
+
                   <div className="col-md-6">
                     <div className="form-floating">
-                      <input type="text" className="form-control" id="name" placeholder="Your Name" />
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        placeholder="Your Name"
+                        value={name}
+                        onChange={handleChange}
+                        required
+                      />
                       <label htmlFor="name">Your Name</label>
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-floating">
-                      <input type="email" className="form-control" id="email" placeholder="Your Email" />
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="email"
+                        placeholder="Your Email"
+                        value={email}
+                        onChange={handleChange}
+                        required
+                      />
                       <label htmlFor="email">Your Email</label>
                     </div>
                   </div>
+
                   <div className="col-12">
                     <div className="form-floating">
-                      <input type="text" className="form-control" id="subject" placeholder="Subject" />
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="subject"
+                        placeholder="Subject"
+                        value={subject}
+                        onChange={handleChange}
+                      />
                       <label htmlFor="subject">Subject</label>
                     </div>
                   </div>
+
                   <div className="col-12">
                     <div className="form-floating">
                       <textarea
                         className="form-control"
-                        placeholder="Leave a message here"
                         id="message"
+                        placeholder="Leave a message here"
                         style={{ height: "150px" }}
+                        value={message}
+                        onChange={handleChange}
+                        required
                       ></textarea>
                       <label htmlFor="message">Message</label>
                     </div>
                   </div>
+
                   <div className="col-12">
-                    <button className="btn btn-primary w-100 py-3" type="submit">Send Message</button>
+                    <button
+                      className="btn btn-primary w-100 py-3"
+                      type="submit"
+                      disabled={loading}
+                    >
+                      {loading ? "Sending..." : "Send Message"}
+                    </button>
                   </div>
+
                 </div>
               </form>
             </div>
@@ -121,8 +189,8 @@ function Contact() {
           </div>
         </div>
       </div>
-      <Footer />
 
+      <Footer />
     </div>
   );
 }

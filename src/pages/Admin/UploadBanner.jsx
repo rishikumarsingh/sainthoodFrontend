@@ -18,7 +18,8 @@ function UploadBanner() {
   };
 
   // Submit upload
-  const handleSubmit = (e) => {
+  // Submit upload
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (banners.length === 0) {
@@ -31,11 +32,22 @@ function UploadBanner() {
       formData.append("files", file);
     });
 
-    dispatch(bannerUpload(formData)).then(() => {
-      setBanners([]); // clear after upload
+    try {
+      // ✅ unwrap → throws backend error
+      await dispatch(bannerUpload(formData)).unwrap();
+
+      alert("Banner uploaded successfully ✅");
+      setBanners([]);             // clear after upload
       dispatch(getBannerImages()); // refresh table
-    });
+
+    } catch (errorMessage) {
+      // ❌ backend error message
+      alert(errorMessage);
+      setBanners([]);             // clear after upload
+
+    }
   };
+
 
   // Remove banner
   const handleRemove = (id) => {

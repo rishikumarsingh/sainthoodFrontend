@@ -250,12 +250,12 @@ body {
 }
 
 .logotextheading {
-  font-size: 18px;
+  font-size: 14px;
   text-transform: uppercase;
 }
 
 .logotextsubheading {
-  font-size: 16px;
+  font-size: 13px;
   color: #2a56a2;
 }
 
@@ -293,7 +293,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  height: 42px;
+  height: 39px;
   width: 100%;
 
   /* Red borders for the top 42px */
@@ -306,7 +306,7 @@ body {
 .divBox::after {
   content: "";
   position: absolute;
-  top: 42px;
+  top: 39px;
   left: 0;
   width: 100%;
   height: calc(100% - 42px);

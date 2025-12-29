@@ -74,6 +74,62 @@ export const notificationCreate = createAsyncThunk(
   }
 );
 
+// 🔑 Fetch Banner Images
+export const getBannerImages = createAsyncThunk(
+  'auth/getBannerImages',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      const response = await fetch(apiUrl + "getBannerImages", {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Fetching banner images failed');
+      }
+
+      return await response.json(); // should be array of banners
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// 🔑 Delete Notification
+export const deleteNotification = createAsyncThunk(
+  "auth/deleteNotification",
+  async (deleteId, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+
+      const response = await fetch(
+        `${apiUrl}notification/${deleteId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Notification delete failed");
+      }
+
+      return { success: true, id: deleteId };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 // 🔑 Banner Upload
 export const bannerUpload = createAsyncThunk(
   'auth/bannerUpload',
@@ -126,13 +182,13 @@ export const galleryUpload = createAsyncThunk(
   }
 );
 
-// 🔑 Fetch Banner Images
-export const getBannerImages = createAsyncThunk(
-  'auth/getBannerImages',
+// 🔔 Fetch Notifications
+export const getNotifications = createAsyncThunk(
+  'auth/getNotifications',
   async (_, { rejectWithValue }) => {
     try {
       const token = getToken();
-      const response = await fetch(apiUrl + "getBannerImages", {
+      const response = await fetch(apiUrl + "getNotifications", {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -141,15 +197,18 @@ export const getBannerImages = createAsyncThunk(
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        throw new Error(errorResponse.message || 'Fetching banner images failed');
+        throw new Error(
+          errorResponse.message || 'Fetching notifications failed'
+        );
       }
 
-      return await response.json(); // should be array of banners
+      return await response.json(); // should be array of notifications
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
+
 
 // 🔑 Fetch Gallery Images
 export const getGalleryImages = createAsyncThunk(
@@ -228,6 +287,94 @@ export const deleteGallery = createAsyncThunk(
   }
 );
 
+
+// 📩 Create Contact
+export const contactCreate = createAsyncThunk(
+  "auth/contactCreate",
+  async (contactData, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+
+      const response = await fetch(apiUrl + "contactCreate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(contactData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Contact create failed");
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// 📥 Get All Contacts
+export const getContacts = createAsyncThunk(
+  "auth/getContacts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+
+      const response = await fetch(apiUrl + "getContacts", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Fetching contacts failed");
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// ❌ Delete Contact
+export const deleteContact = createAsyncThunk(
+  "auth/deleteContact",
+  async (deleteId, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+
+      const response = await fetch(
+        `${apiUrl}contact/${deleteId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Contact delete failed");
+      }
+
+      return { id: deleteId };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 // 🔑 Slice
 const authSlice = createSlice({
   name: 'auth',
@@ -270,6 +417,37 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
+
+      // get notifications
+      .addCase(getNotifications.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getNotifications.fulfilled, (state, action) => {
+        state.loading = false;
+        state.notifications = action.payload?.data || action.payload; // ✅ array
+        state.error = null;
+      })
+      .addCase(getNotifications.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // delete notification
+      .addCase(deleteNotification.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteNotification.fulfilled, (state, action) => {
+        state.loading = false;
+        state.notifications = state.notifications.filter(
+          (item) => item._id !== action.payload.id
+        );
+      })
+      .addCase(deleteNotification.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       // banner upload
       .addCase(bannerUpload.pending, (state) => {
         state.loading = true;
@@ -299,6 +477,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
+
 
       // get banner images
       .addCase(getBannerImages.pending, (state) => {
@@ -330,6 +510,47 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
+
+      // ================= CREATE CONTACT =================
+      .addCase(contactCreate.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(contactCreate.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(contactCreate.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // ================= GET CONTACTS =================
+      .addCase(getContacts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getContacts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.contacts = action.payload?.data || action.payload;
+      })
+      .addCase(getContacts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // ================= DELETE CONTACT =================
+      .addCase(deleteContact.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.loading = false;
+        state.contacts = state.contacts.filter(
+          (item) => item._id !== action.payload.id
+        );
+      })
+      .addCase(deleteContact.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
   },
 });
 
