@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const apiUrl = "http://localhost:5000/api/";
+const apiUrl = "https://localhost:5000/api/";
 
 const initialState = {
   loading: false,
